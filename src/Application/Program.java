@@ -1,22 +1,19 @@
 package Application;
 
-import java.util.InputMismatchException;
+import java.text.ParseException;
 import java.util.Locale;
 import java.util.Scanner;
 
 import Model.entities.Account;
-import Model.entities.DomainException;
+import Model.exceptions.DomainException;
 
 public class Program {
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws ParseException {
+		
 		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner(System.in);	
+		Scanner sc = new Scanner(System.in);
 		
-		
-		try {
-
 		System.out.println("Enter account data");
 		System.out.print("Number: ");
 		int number = sc.nextInt();
@@ -24,30 +21,23 @@ public class Program {
 		sc.nextLine();
 		String holder = sc.nextLine();
 		System.out.print("Initial balance: ");
-		Double balance = sc.nextDouble();
-		sc.nextLine();
+		double balance = sc.nextDouble();
 		System.out.print("Withdraw limit: ");
-		Double withdrawLimit = sc.nextDouble();
-		Account acc = new Account (number, holder, balance, withdrawLimit);
-				
+		double withdrawLimit = sc.nextDouble();
+		
+		Account acc = new Account(number, holder, balance, withdrawLimit);
+		
 		System.out.println();
 		System.out.print("Enter amount for withdraw: ");
 		double amount = sc.nextDouble();
-		acc.withdraw(amount);
-		System.out.println("New balance: " + String.format("%.2f", acc.getBalance()));	
-		
-		}
-		
-		catch (InputMismatchException e) {
-			System.out.println("Incorrect data - Closing application");
+		try {
+			acc.withdraw(amount);
+			System.out.println("New balance: " + String.format("%.2f", acc.getBalance()));
 		}
 		catch (DomainException e) {
-			System.out.println(e.getMessage());
-		}
-		catch (RuntimeException e) {
-			System.out.println("Unexpected error");
+			System.out.println("Withdraw error: " + e.getMessage());
 		}
 		
 		sc.close();
-		}		
 	}
+}

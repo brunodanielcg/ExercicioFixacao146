@@ -1,5 +1,7 @@
 package Model.entities;
 
+import Model.exceptions.DomainException;
+
 public class Account {
 
 	private Integer number;
@@ -7,9 +9,6 @@ public class Account {
 	private Double balance;
 	private Double withdrawLimit;
 	
-	public Account() {
-	}
-
 	public Account(Integer number, String holder, Double balance, Double withdrawLimit) {
 		this.number = number;
 		this.holder = holder;
@@ -21,6 +20,9 @@ public class Account {
 		return number;
 	}
 
+	// I removed the method setHolder() , not sure if that's okay,
+    // but I guess it should not be changed by direct access.
+	
 	public String getHolder() {
 		return holder;
 	}
@@ -43,14 +45,12 @@ public class Account {
 
 	public void withdraw(Double amount) {
 		if (amount > withdrawLimit) {
-			throw new DomainException ("Withdraw error: The amount exceeds withdraw limit");
+			throw new DomainException ("The amount exceeds withdraw limit");
 		}
 		if (amount > balance) {
-			throw new DomainException ("Withdraw error: Not enough balance");
+			throw new DomainException ("Not enough balance");
 		}		
-		else {
-		balance -= amount;
-		}
+		balance -= amount;	
 	}
 		
 }
